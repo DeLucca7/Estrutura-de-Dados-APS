@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 int main()
 {
     FILE *Data;
-    Data = fopen("data.txt", "r");
+    int data[5000], i;
+    clock_t start, end;
+    double cpu_time_used;
 
-    int data[5000];
-    int i;
+    Data = fopen("data.txt", "r");
 
     for (i = 0; i < 5000; i++){
         fscanf(Data, "%d,", &data[i] );
@@ -17,8 +19,13 @@ int main()
 
     int size = sizeof(data) / sizeof(data[0]);
 
-    // bubbleSort(data, size);
+    start = clock();
     insertionSort(data, size);
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("Tempo de Execução = %f\n", cpu_time_used);
+
+    // bubbleSort(data, size);
     return 0;
 }
 
