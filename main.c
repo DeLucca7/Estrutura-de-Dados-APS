@@ -17,7 +17,8 @@ int main()
 
     int size = sizeof(data) / sizeof(data[0]);
 
-    bubbleSort(data, size);
+    // bubbleSort(data, size);
+    insertionSort(data, size);
     return 0;
 }
 
@@ -41,4 +42,28 @@ printf("\n");
 printf("Movements: ");
 printf("%i", movements);
 printf("\n");
+}
+
+void insertionSort(int data[], int size)
+{
+    int i, key, j, movements;
+    for (i = 1; i < size; i++) {
+        key = data[i];
+        j = i - 1;
+  
+        while (j >= 0 && data[j] > key) {
+            movements += 1;
+            data[j + 1] = data[j];
+            j = j - 1;
+        }
+        data[j + 1] = key;
+    }
+
+    for (i = 0; i < size; i++) {
+      printf("%4d\n", data[i]);
+    }
+    printf("\n");
+    printf("Movements: ");
+    printf("%i", movements);
+    printf("\n");
 }
