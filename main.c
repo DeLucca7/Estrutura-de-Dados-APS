@@ -4,9 +4,14 @@
 
 int main()
 {
-    int v[10] = {270,324,45,42,55,123,339,112,10, 99};
-    int size = sizeof(v) / sizeof(v[0]);
+    FILE *Data;
+    Data = fopen("data.txt", "r");
+    int v[5000], size = sizeof(v) / sizeof(v[0]), i;
     clock_t start, end;
+
+    for (i = 0; i < 5000; i++){
+        fscanf(Data, "%d,", &v[i] );
+    }
 
     printf("Insertion Sort: \n\n");
     start = clock();
@@ -47,7 +52,7 @@ void bubbleSort(int v[], int size, clock_t start)
    }
  }
  calcTime(start);
- printArray(v, size);
+//  printArray(v, size);
 }
 
 void insertionSort(int v[], int size, clock_t start)
@@ -64,7 +69,7 @@ void insertionSort(int v[], int size, clock_t start)
         v[j + 1] = key;
     }
     calcTime(start);
-    printArray(v, size);
+    // printArray(v, size);
 }
 
 void swap(int *xp, int *yp)
@@ -93,7 +98,7 @@ void selectionSort(int v[], int size, clock_t start)
     }
 
     calcTime(start);
-    printArray(v, size);
+    // printArray(v, size);
 }
 
 void printArray(int v[], int size)
