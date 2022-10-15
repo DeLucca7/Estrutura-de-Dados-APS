@@ -4,73 +4,103 @@
 
 int main()
 {
-    FILE *Data;
-    int data[5000], i;
+    int v[10] = {270,324,45,42,55,123,339,112,10, 99};
+    int size = sizeof(v) / sizeof(v[0]);
     clock_t start, end;
-    double cpu_time_used;
 
-    Data = fopen("data.txt", "r");
-
-    for (i = 0; i < 5000; i++){
-        fscanf(Data, "%d,", &data[i] );
-    }
-
-    fclose(Data);
-
-    int size = sizeof(data) / sizeof(data[0]);
-
+    printf("Insertion Sort: \n\n");
     start = clock();
-    insertionSort(data, size);
-    end = clock();
-    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-    printf("Tempo de Execução = %f\n", cpu_time_used);
+    insertionSort(v, size, start);
+    printf("-----------------------------------------------------\n");
 
-    // bubbleSort(data, size);
-    return 0;
+    printf("Bubble Sort: \n\n");
+    start = clock();
+    bubbleSort(v, size, start);
+    printf("-----------------------------------------------------\n");
+
+    printf("Selection Sort: \n\n");
+    start = clock();
+    selectionSort(v, size, start);
+    printf("-----------------------------------------------------\n");
 }
 
-void bubbleSort(int data[], int size)
+void calcTime(clock_t start)
 {
- int i, aux, count, movements;
+    clock_t end;
+    double cpu_time_used;
+
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("Tempo de Execução = %f\n\n", cpu_time_used);
+}
+
+void bubbleSort(int v[], int size, clock_t start)
+{
+ int i, aux, count;
  for (count = 1; count < size; count++) {
    for (i = 0; i < size - 1; i++) {
-     if (data[i] > data[i + 1]) {
-       movements += 1;
-       aux = data[i];
-       data[i] = data[i + 1];
-       data[i + 1] = aux;
+     if (v[i] > v[i + 1]) {
+       aux = v[i];
+       v[i] = v[i + 1];
+       v[i + 1] = aux;
      }
    }
  }
-for (i = 0; i < size; i++) {
- printf("%4d\n", data[i]);
-}
-printf("\n");
-printf("Movements: ");
-printf("%i", movements);
-printf("\n");
+ calcTime(start);
+ printArray(v, size);
 }
 
-void insertionSort(int data[], int size)
+void insertionSort(int v[], int size, clock_t start)
 {
-    int i, key, j, movements;
+    int i, key, j;
     for (i = 1; i < size; i++) {
-        key = data[i];
+        key = v[i];
         j = i - 1;
   
-        while (j >= 0 && data[j] > key) {
-            movements += 1;
-            data[j + 1] = data[j];
+        while (j >= 0 && v[j] > key) {
+            v[j + 1] = v[j];
             j = j - 1;
         }
-        data[j + 1] = key;
+        v[j + 1] = key;
+    }
+    calcTime(start);
+    printArray(v, size);
+}
+
+void swap(int *xp, int *yp)
+{
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+void selectionSort(int v[], int size, clock_t start)
+{
+    int i, j, idx;
+ 
+    for (i = 0; i < size-1; i++)
+    {
+        idx = i;
+        for (j = i+1; j < size; j++) {
+          if (v[j] < v[idx]) {
+            idx = j;
+          }
+        }
+ 
+        if(idx != i) {
+            swap(&v[idx], &v[i]);
+        }
     }
 
+    calcTime(start);
+    printArray(v, size);
+}
+
+void printArray(int v[], int size)
+{
+    int i;
+
     for (i = 0; i < size; i++) {
-      printf("%4d\n", data[i]);
+      printf("%4d\n\n", v[i]);
     }
-    printf("\n");
-    printf("Movements: ");
-    printf("%i", movements);
-    printf("\n");
 }
