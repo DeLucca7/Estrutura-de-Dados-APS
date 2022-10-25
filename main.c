@@ -4,108 +4,108 @@
 
 int main()
 {
-    FILE *Data;
-    Data = fopen("data.txt", "r");
-    int v[5000], size = sizeof(v) / sizeof(v[0]), i;
-    clock_t start, end;
+    const int dataSize = 10000;
+    FILE * DataArchive;
+    DataArchive = fopen("data.txt", "r");
+    int initialData[dataSize],
+        sizeOfData = sizeof(initialData) / sizeof(initialData[0]),
+        i;
 
-    for (i = 0; i < 5000; i++){
-        fscanf(Data, "%d,", &v[i] );
+    clock_t startTime;
+
+    for (i = 0; i < dataSize; i++){
+        fscanf(DataArchive, "%d,", &initialData[i] );
     }
 
     printf("Insertion Sort: \n\n");
-    start = clock();
-    insertionSort(v, size, start);
+    startTime = clock();
+    insertionSort(initialData, sizeOfData, startTime);
     printf("-----------------------------------------------------\n");
 
     printf("Bubble Sort: \n\n");
-    start = clock();
-    bubbleSort(v, size, start);
+    startTime = clock();
+    bubbleSort(initialData, sizeOfData, startTime);
     printf("-----------------------------------------------------\n");
 
     printf("Selection Sort: \n\n");
-    start = clock();
-    selectionSort(v, size, start);
+    startTime = clock();
+    selectionSort(initialData, sizeOfData, startTime);
     printf("-----------------------------------------------------\n");
 }
 
-void calcTime(clock_t start)
-{
-    clock_t end;
-    double cpu_time_used;
 
-    end = clock();
-    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-    printf("Tempo de Execução = %f\n\n", cpu_time_used);
+//Função que calcula a diferência de tempo inicial e final
+int calcTime(clock_t startTime)
+{
+    clock_t endTime;
+    double timeDiff;
+
+    endTime = clock();
+    timeDiff = ((double) (endTime - startTime)) / CLOCKS_PER_SEC;
+    printf("Tempo de Execução = %f\n\n", timeDiff);
+    return 0;
 }
 
-void bubbleSort(int v[], int size, clock_t start)
+int bubbleSort(int initialData[], int sizeOfData, clock_t startTime)
 {
  int i, aux, count;
- for (count = 1; count < size; count++) {
-   for (i = 0; i < size - 1; i++) {
-     if (v[i] > v[i + 1]) {
-       aux = v[i];
-       v[i] = v[i + 1];
-       v[i + 1] = aux;
+ for (count = 1; count < sizeOfData; count++) {
+   for (i = 0; i < sizeOfData - 1; i++) {
+     if (initialData[i] > initialData[i + 1]) {
+       aux = initialData[i];
+       initialData[i] = initialData[i + 1];
+       initialData[i + 1] = aux;
      }
    }
  }
- calcTime(start);
-//  printArray(v, size);
+ calcTime(startTime);
+ return 0;
 }
 
-void insertionSort(int v[], int size, clock_t start)
+int insertionSort(int initialData[], int sizeOfData, clock_t startTime)
 {
     int i, key, j;
-    for (i = 1; i < size; i++) {
-        key = v[i];
+    for (i = 1; i < sizeOfData; i++) {
+        key = initialData[i];
         j = i - 1;
   
-        while (j >= 0 && v[j] > key) {
-            v[j + 1] = v[j];
+        while (j >= 0 && initialData[j] > key) {
+            initialData[j + 1] = initialData[j];
             j = j - 1;
         }
-        v[j + 1] = key;
+        initialData[j + 1] = key;
     }
-    calcTime(start);
-    // printArray(v, size);
+    calcTime(startTime);
+
+    return 0;
 }
 
-void swap(int *xp, int *yp)
+swap(int *xp, int *yp)
 {
     int temp = *xp;
     *xp = *yp;
     *yp = temp;
 }
 
-void selectionSort(int v[], int size, clock_t start)
+int selectionSort(int initialData[], int sizeOfData, clock_t startTime)
 {
     int i, j, idx;
  
-    for (i = 0; i < size-1; i++)
+    for (i = 0; i < sizeOfData-1; i++)
     {
         idx = i;
-        for (j = i+1; j < size; j++) {
-          if (v[j] < v[idx]) {
+        for (j = i+1; j < sizeOfData; j++) {
+          if (initialData[j] < initialData[idx]) {
             idx = j;
           }
         }
  
         if(idx != i) {
-            swap(&v[idx], &v[i]);
+            swap(&initialData[idx], &initialData[i]);
         }
     }
 
-    calcTime(start);
-    // printArray(v, size);
-}
+    calcTime(startTime);
 
-void printArray(int v[], int size)
-{
-    int i;
-
-    for (i = 0; i < size; i++) {
-      printf("%4d\n\n", v[i]);
-    }
+    return 0;
 }
