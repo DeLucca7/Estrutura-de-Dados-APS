@@ -1,111 +1,113 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 #include <time.h>
+#include <stdlib.h> // for atoi
 
-int main()
+int calcularTempoExecucao(clock_t inicioDoCronometro)
 {
-    const int dataSize = 10000;
-    FILE * DataArchive;
-    DataArchive = fopen("data.txt", "r");
-    int initialData[dataSize],
-        sizeOfData = sizeof(initialData) / sizeof(initialData[0]),
-        i;
+    clock_t fimDoCronometro;
+    double tempoDeExecução;
 
-    clock_t startTime;
-
-    for (i = 0; i < dataSize; i++){
-        fscanf(DataArchive, "%d,", &initialData[i] );
-    }
-
-    printf("Insertion Sort: \n\n");
-    startTime = clock();
-    insertionSort(initialData, sizeOfData, startTime);
-    printf("-----------------------------------------------------\n");
-
-    printf("Bubble Sort: \n\n");
-    startTime = clock();
-    bubbleSort(initialData, sizeOfData, startTime);
-    printf("-----------------------------------------------------\n");
-
-    printf("Selection Sort: \n\n");
-    startTime = clock();
-    selectionSort(initialData, sizeOfData, startTime);
-    printf("-----------------------------------------------------\n");
-}
-
-
-//Função que calcula a diferência de tempo inicial e final
-int calcTime(clock_t startTime)
-{
-    clock_t endTime;
-    double timeDiff;
-
-    endTime = clock();
-    timeDiff = ((double) (endTime - startTime)) / CLOCKS_PER_SEC;
-    printf("Tempo de Execução = %f\n\n", timeDiff);
+    fimDoCronometro = clock();
+    tempoDeExecução = ((double) (fimDoCronometro - inicioDoCronometro)) / CLOCKS_PER_SEC;
+    printf("Tempo de Execução = %f\n\n", tempoDeExecução);
     return 0;
 }
 
-int bubbleSort(int initialData[], int sizeOfData, clock_t startTime)
+int bubbleSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCronometro)
 {
- int i, aux, count;
- for (count = 1; count < sizeOfData; count++) {
-   for (i = 0; i < sizeOfData - 1; i++) {
-     if (initialData[i] > initialData[i + 1]) {
-       aux = initialData[i];
-       initialData[i] = initialData[i + 1];
-       initialData[i + 1] = aux;
+ int i, aux, contador;
+ for (contador = 1; contador < quantidadeDados; contador++) {
+   for (i = 0; i < quantidadeDados - 1; i++) {
+     if (dadosIniciais[i] > dadosIniciais[i + 1]) {
+       aux = dadosIniciais[i];
+       dadosIniciais[i] = dadosIniciais[i + 1];
+       dadosIniciais[i + 1] = aux;
      }
    }
  }
- calcTime(startTime);
+ calcularTempoExecucao(inicioDoCronometro);
  return 0;
 }
 
-int insertionSort(int initialData[], int sizeOfData, clock_t startTime)
+int insertionSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCronometro)
 {
-    int i, key, j;
-    for (i = 1; i < sizeOfData; i++) {
-        key = initialData[i];
+    int i, chave, j;
+    for (i = 1; i < quantidadeDados; i++) {
+        chave = dadosIniciais[i];
         j = i - 1;
   
-        while (j >= 0 && initialData[j] > key) {
-            initialData[j + 1] = initialData[j];
+        while (j >= 0 && dadosIniciais[j] > chave) {
+            dadosIniciais[j + 1] = dadosIniciais[j];
             j = j - 1;
         }
-        initialData[j + 1] = key;
+        dadosIniciais[j + 1] = chave;
     }
-    calcTime(startTime);
+    calcularTempoExecucao(inicioDoCronometro);
 
     return 0;
 }
 
-swap(int *xp, int *yp)
+void swap(int *xp, int *yp)
 {
     int temp = *xp;
     *xp = *yp;
     *yp = temp;
 }
 
-int selectionSort(int initialData[], int sizeOfData, clock_t startTime)
+int selectionSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCronometro)
 {
     int i, j, idx;
  
-    for (i = 0; i < sizeOfData-1; i++)
+    for (i = 0; i < quantidadeDados-1; i++)
     {
         idx = i;
-        for (j = i+1; j < sizeOfData; j++) {
-          if (initialData[j] < initialData[idx]) {
+        for (j = i+1; j < quantidadeDados; j++) {
+          if (dadosIniciais[j] < dadosIniciais[idx]) {
             idx = j;
           }
         }
  
         if(idx != i) {
-            swap(&initialData[idx], &initialData[i]);
+            swap(&dadosIniciais[idx], &dadosIniciais[i]);
         }
     }
 
-    calcTime(startTime);
+    calcularTempoExecucao(inicioDoCronometro);
 
     return 0;
+}
+
+int main()
+{
+    const int quantidadeDados = 10000;
+
+    FILE * arquivoDeDados;
+
+    arquivoDeDados = fopen("data.txt", "r");
+
+    int dadosIniciais[quantidadeDados],
+    i;
+
+    clock_t inicioDoCronometro;
+
+    // extraindo os dados do arquivo e passando para o vetor dadosIniciais
+    for (i = 0; i < quantidadeDados; i++){
+        fscanf(arquivoDeDados, "%d,", &dadosIniciais[i] );
+    }
+
+    printf("Insertion Sort: \n\n");
+    inicioDoCronometro = clock();
+    insertionSort(dadosIniciais, quantidadeDados, inicioDoCronometro);
+    printf("-----------------------------------------------------\n");
+
+    printf("Bubble Sort: \n\n");
+    inicioDoCronometro = clock();
+    bubbleSort(dadosIniciais, quantidadeDados, inicioDoCronometro);
+    printf("-----------------------------------------------------\n");
+
+    printf("Selection Sort: \n\n");
+    inicioDoCronometro = clock();
+    selectionSort(dadosIniciais, quantidadeDados, inicioDoCronometro);
+    printf("-----------------------------------------------------\n");
 }
