@@ -1,7 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include <stdlib.h> // for atoi
+#include <stdlib.h> 
+
+/*
+Função que calcula tempo de execução de cada algoritmo.
+Recebe como parametro uma variavel do tipo clock_t armazenando o inicio da execução.
+Retorna um printf com o tempo de execução
+*/
 
 int calcularTempoExecucao(clock_t inicioDoCronometro)
 {
@@ -13,6 +19,15 @@ int calcularTempoExecucao(clock_t inicioDoCronometro)
     printf("Tempo de Execução = %f\n\n", tempoDeExecução);
     return 0;
 }
+
+/*
+Função que executa a ordenação BubbleSort
+Recebe como parametros:
+- um vetor de inteiros com os dados iniciais, 
+- um inteiro com o numero de dados 
+- um clock_t com o valor do inicio do cronometro
+Após executar o algoritmo, calcula o tempo de execução do mesmo chamando a função calcularTempoExecucao()
+*/
 
 int bubbleSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCronometro)
 {
@@ -29,6 +44,15 @@ int bubbleSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCronome
  calcularTempoExecucao(inicioDoCronometro);
  return 0;
 }
+
+/*
+Função que executa a ordenação InsertionSort
+Recebe como parametros:
+- um vetor de inteiros com os dados iniciais, 
+- um inteiro com o numero de dados 
+- um clock_t com o valor do inicio do cronometro
+Após executar o algoritmo, calcula o tempo de execução do mesmo chamando a função calcularTempoExecucao()
+*/
 
 int insertionSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCronometro)
 {
@@ -48,12 +72,25 @@ int insertionSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCron
     return 0;
 }
 
+/*
+Função de swap utilizada nas execuções de SelectionSort
+Recebe como parametros dois ponteiros. (xp e yp)
+*/
 void swap(int *xp, int *yp)
 {
     int temp = *xp;
     *xp = *yp;
     *yp = temp;
 }
+
+/*
+Função que executa a ordenação SelectionSort
+Recebe como parametros:
+- um vetor de inteiros com os dados iniciais, 
+- um inteiro com o numero de dados 
+- um clock_t com o valor do inicio do cronometro
+Após executar o algoritmo, calcula o tempo de execução do mesmo chamando a função calcularTempoExecucao()
+*/
 
 int selectionSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCronometro)
 {
