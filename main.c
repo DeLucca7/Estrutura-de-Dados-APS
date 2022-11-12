@@ -9,7 +9,7 @@ Recebe como parametro uma variavel do tipo clock_t armazenando o inicio da execu
 Retorna um printf com o tempo de execução
 */
 
-int calcularTempoExecucao(clock_t inicioDoCronometro)
+void calcularTempoExecucao(clock_t inicioDoCronometro)
 {
     clock_t fimDoCronometro;
     double tempoDeExecução;
@@ -17,34 +17,45 @@ int calcularTempoExecucao(clock_t inicioDoCronometro)
     fimDoCronometro = clock();
     tempoDeExecução = ((double) (fimDoCronometro - inicioDoCronometro)) / CLOCKS_PER_SEC;
     printf("Tempo de Execução = %f\n\n", tempoDeExecução);
-    return 0;
+    return;
 }
 
 /*
-Função que executa a ordenação BubbleSort
+Função de swap utilizada nas execuções de SelectionSort
+Recebe como parametros dois ponteiros. (xp e yp)
+*/
+void swap(int *xp, int *yp)
+{
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+/*
+Função que executa a ordenação BubbleSort utilizando recursividade
 Recebe como parametros:
 - um vetor de inteiros com os dados iniciais, 
 - um inteiro com o numero de dados 
-- um clock_t com o valor do inicio do cronometro
-Após executar o algoritmo, calcula o tempo de execução do mesmo chamando a função calcularTempoExecucao()
 */
 
-int bubbleSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCronometro)
+void bubbleSort(int dadosIniciais[], int quantidadeDados)
 {
- int i, aux, contador;
- for (contador = 1; contador < quantidadeDados; contador++) {
-   for (i = 0; i < quantidadeDados - 1; i++) {
-     if (dadosIniciais[i] > dadosIniciais[i + 1]) {
-       aux = dadosIniciais[i];
-       dadosIniciais[i] = dadosIniciais[i + 1];
-       dadosIniciais[i + 1] = aux;
-     }
-   }
- }
- calcularTempoExecucao(inicioDoCronometro);
- return 0;
-}
+    if (quantidadeDados == 1)
+        return;
+ 
+    int contador = 0;
 
+    for (int i=0; i<quantidadeDados-1; i++)
+        if (dadosIniciais[i] > dadosIniciais[i+1]){
+            swap(&dadosIniciais[i], &dadosIniciais[i+1]);
+            contador++;
+        }
+ 
+      if (contador==0)
+           return;
+ 
+    bubbleSort(dadosIniciais, quantidadeDados-1);
+}
 /*
 Função que executa a ordenação InsertionSort utilizando recursividade
 Recebe como parametros:
@@ -70,26 +81,13 @@ void insertionSort(int dadosIniciais[], int quantidadeDados)
 }
 
 /*
-Função de swap utilizada nas execuções de SelectionSort
-Recebe como parametros dois ponteiros. (xp e yp)
-*/
-void swap(int *xp, int *yp)
-{
-    int temp = *xp;
-    *xp = *yp;
-    *yp = temp;
-}
-
-/*
 Função que executa a ordenação SelectionSort
 Recebe como parametros:
 - um vetor de inteiros com os dados iniciais, 
 - um inteiro com o numero de dados 
-- um clock_t com o valor do inicio do cronometro
-Após executar o algoritmo, calcula o tempo de execução do mesmo chamando a função calcularTempoExecucao()
 */
 
-int selectionSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCronometro)
+void selectionSort(int dadosIniciais[], int quantidadeDados)
 {
     int i, j, idx;
  
@@ -107,42 +105,59 @@ int selectionSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCron
         }
     }
 
-    calcularTempoExecucao(inicioDoCronometro);
+    return;
+}
 
-    return 0;
+/*
+Função que inicia os vetores
+Recebe como parametros:
+- um inteiro com o numero de dados,
+- um vetor de inteiros
+*/
+void iniciarVetor(int quantidadeDados, int dadosIniciais[])
+{
+  FILE * arquivoDeDados;
+
+  int i;
+
+  arquivoDeDados = fopen("data.txt", "r");
+
+  // extraindo os dados do arquivo e passando para o vetor dadosIniciais
+  for (i = 0; i < quantidadeDados; i++){
+      fscanf(arquivoDeDados, "%d,", &dadosIniciais[i] );
+  }
+
+  return;
 }
 
 int main()
 {
     const int quantidadeDados = 10000;
 
-    FILE * arquivoDeDados;
-
-    arquivoDeDados = fopen("data.txt", "r");
-
-    int dadosIniciais[quantidadeDados],
-    i;
+    int dadosIniciaisBubbleSort[quantidadeDados],
+    dadosIniciaisSelectionSort[quantidadeDados],
+    dadosIniciaisInsertionSort[quantidadeDados];
 
     clock_t inicioDoCronometro;
 
-    // extraindo os dados do arquivo e passando para o vetor dadosIniciais
-    for (i = 0; i < quantidadeDados; i++){
-        fscanf(arquivoDeDados, "%d,", &dadosIniciais[i] );
-    }
-
-    printf("Insertion Sort: \n\n");
+    printf("Bubble Sort: \n\n");
+    iniciarVetor(quantidadeDados, dadosIniciaisBubbleSort);
     inicioDoCronometro = clock();
-    insertionSort(dadosIniciais, quantidadeDados);
+    bubbleSort(dadosIniciaisBubbleSort, quantidadeDados);
     calcularTempoExecucao(inicioDoCronometro);
     printf("-----------------------------------------------------\n");
 
-    printf("Bubble Sort: \n\n");
+    printf("Insertion Sort: \n\n");
+    iniciarVetor(quantidadeDados, dadosIniciaisInsertionSort);
     inicioDoCronometro = clock();
-    bubbleSort(dadosIniciais, quantidadeDados, inicioDoCronometro);
+    insertionSort(dadosIniciaisInsertionSort, quantidadeDados);
+    calcularTempoExecucao(inicioDoCronometro);
     printf("-----------------------------------------------------\n");
 
     printf("Selection Sort: \n\n");
+    iniciarVetor(quantidadeDados, dadosIniciaisSelectionSort);
     inicioDoCronometro = clock();
-    selectionSort(dadosIniciais, quantidadeDados, inicioDoCronometro);
+    selectionSort(dadosIniciaisSelectionSort, quantidadeDados);
+    calcularTempoExecucao(inicioDoCronometro);
     printf("-----------------------------------------------------\n");
 }
