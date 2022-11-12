@@ -46,30 +46,27 @@ int bubbleSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCronome
 }
 
 /*
-Função que executa a ordenação InsertionSort
+Função que executa a ordenação InsertionSort utilizando recursividade
 Recebe como parametros:
 - um vetor de inteiros com os dados iniciais, 
 - um inteiro com o numero de dados 
-- um clock_t com o valor do inicio do cronometro
-Após executar o algoritmo, calcula o tempo de execução do mesmo chamando a função calcularTempoExecucao()
 */
 
-int insertionSort(int dadosIniciais[], int quantidadeDados, clock_t inicioDoCronometro)
+void insertionSort(int dadosIniciais[], int quantidadeDados)
 {
-    int i, chave, j;
-    for (i = 1; i < quantidadeDados; i++) {
-        chave = dadosIniciais[i];
-        j = i - 1;
-  
-        while (j >= 0 && dadosIniciais[j] > chave) {
-            dadosIniciais[j + 1] = dadosIniciais[j];
-            j = j - 1;
-        }
-        dadosIniciais[j + 1] = chave;
+    if (quantidadeDados <= 1)
+        return;
+ 
+    insertionSort(dadosIniciais, quantidadeDados - 1);
+ 
+    int ultimoElemento = dadosIniciais[quantidadeDados - 1];
+    int j = quantidadeDados - 2;
+ 
+    while (j >= 0 && dadosIniciais[j] > ultimoElemento) {
+        dadosIniciais[j + 1] = dadosIniciais[j];
+        j--;
     }
-    calcularTempoExecucao(inicioDoCronometro);
-
-    return 0;
+    dadosIniciais[j + 1] = ultimoElemento;
 }
 
 /*
@@ -135,7 +132,8 @@ int main()
 
     printf("Insertion Sort: \n\n");
     inicioDoCronometro = clock();
-    insertionSort(dadosIniciais, quantidadeDados, inicioDoCronometro);
+    insertionSort(dadosIniciais, quantidadeDados);
+    calcularTempoExecucao(inicioDoCronometro);
     printf("-----------------------------------------------------\n");
 
     printf("Bubble Sort: \n\n");
